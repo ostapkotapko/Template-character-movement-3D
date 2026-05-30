@@ -50,6 +50,6 @@ public class PlayerMovement : MonoBehaviour
         float directionSpeed = moveSpeed * Time.deltaTime;
 
         //Moving player
-        transform.position += directionVector * directionSpeed;
+        transform.position += transform.TransformDirection(directionVector) * directionSpeed;
     }
 }

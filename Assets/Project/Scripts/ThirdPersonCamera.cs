@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FirstPersonCamera : MonoBehaviour
+public class ThirdPersonCamera : MonoBehaviour
 {
-    // This script for first person player camera with InputAction and game events "bool canLook" that enable or disable camera movement
+    // This script for third person player camera with InputAction and game events "bool canLook" that enable or disable camera movement
     // IMPORTANT: This script need PlayerInput component with "Look" action set up in the Input Actions asset
 
     private bool canLook = true;
@@ -12,18 +12,18 @@ public class FirstPersonCamera : MonoBehaviour
     private InputAction lookAction;
     private float currentVerticalAngle = 0f;
 
-    [SerializeField] private Camera playerCamera; // Reference player camera
+    [SerializeField] private GameObject playerCameraPivot; // Reference player camera pivot
     [SerializeField] private float sensitivity = 0.1f; // Sensitivity for camera rotation
     [SerializeField] private float maxVerticalAngle = 80f; // Max vertical angle to prevent flipping
 
     private void OnEnable()
     {
-        GameEvents.OnFirstCameraLook += SetCanLook;
+        GameEvents.OnThirdCameraLook += SetCanLook;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnFirstCameraLook -= SetCanLook;
+        GameEvents.OnThirdCameraLook -= SetCanLook;
     }
 
     private void SetCanLook(bool canLook)
@@ -59,6 +59,6 @@ public class FirstPersonCamera : MonoBehaviour
         // Calculate vertical rotation and clamp it
         currentVerticalAngle -= lookInput.y * sensitivity;
         currentVerticalAngle = Mathf.Clamp(currentVerticalAngle, -maxVerticalAngle, maxVerticalAngle);
-        playerCamera.transform.localEulerAngles = new Vector3(currentVerticalAngle, 0f, 0f);
+        playerCameraPivot.transform.localEulerAngles = new Vector3(currentVerticalAngle, 0f, 0f);
     }
 }

@@ -4,6 +4,7 @@ public static class GameEvents
 {
     public static event Action<bool> OnPlayerCanMove;
     public static event Action<bool> OnFirstCameraLook;
+    public static event Action<bool> OnThirdCameraLook;
 
     public static void SetPlayerMoveState(bool canMove)
     {
@@ -13,5 +14,10 @@ public static class GameEvents
     public static void SetFirstCameraLookState(bool canLook)
     {
         OnFirstCameraLook?.Invoke(canLook);
+    }
+
+    public static void SetThirdCameraLookState(bool canLook)
+    {
+        OnThirdCameraLook?.Invoke(canLook);
     }
 }

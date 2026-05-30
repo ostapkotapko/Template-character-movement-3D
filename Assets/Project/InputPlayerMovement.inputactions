@@ -93,6 +93,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Binds",
+            "id": "cb52a651-ea9d-45b0-92f0-201f91bf8d2f",
+            "actions": [
+                {
+                    "name": "SwitchCameraMod",
+                    "type": "Button",
+                    "id": "b5ccdf0e-b4cc-408b-9e48-bf2d3cc74a9d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6843800d-a77f-4bb0-9a82-bbd8dca6567c",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchCameraMod",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

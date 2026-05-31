@@ -31,13 +31,16 @@ public class CameraSwitcher : MonoBehaviour
 
     private void SwitchPersonCamera()
     {
-        if (firstPersonCamera.enabled)
+        // Toggle the enabled state of both cameras
+        if(firstPersonCamera.enabled)
         {
+            // Switch to third-person camera
             firstPersonCamera.enabled = false;
             thirdPersonCamera.enabled = true;
         }
         else
         {
+            // Switch to first-person camera
             firstPersonCamera.enabled = true;
             thirdPersonCamera.enabled = false;
         }

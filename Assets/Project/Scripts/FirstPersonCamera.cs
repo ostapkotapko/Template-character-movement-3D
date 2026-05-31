@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    // This script for first person player camera with InputAction and game events "bool canLook" that enable or disable camera movement
+    // This script for player camera first person with InputAction and game events "bool canLook" that enable or disable camera movement
     // IMPORTANT: This script need PlayerInput component with "Look" action set up in the Input Actions asset
 
     private bool canLook = true;

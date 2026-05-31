@@ -179,34 +179,6 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""Binds"",
-            ""id"": ""cb52a651-ea9d-45b0-92f0-201f91bf8d2f"",
-            ""actions"": [
-                {
-                    ""name"": ""SwitchCameraMod"",
-                    ""type"": ""Button"",
-                    ""id"": ""b5ccdf0e-b4cc-408b-9e48-bf2d3cc74a9d"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""6843800d-a77f-4bb0-9a82-bbd8dca6567c"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchCameraMod"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": []
@@ -215,15 +187,11 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
         m_Movement_Look = m_Movement.FindAction("Look", throwIfNotFound: true);
-        // Binds
-        m_Binds = asset.FindActionMap("Binds", throwIfNotFound: true);
-        m_Binds_SwitchCameraMod = m_Binds.FindAction("SwitchCameraMod", throwIfNotFound: true);
     }
 
     ~@InputPlayerMovement()
     {
         UnityEngine.Debug.Assert(!m_Movement.enabled, "This will cause a leak and performance issues, InputPlayerMovement.Movement.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_Binds.enabled, "This will cause a leak and performance issues, InputPlayerMovement.Binds.Disable() has not been called.");
     }
 
     /// <summary>
@@ -402,102 +370,6 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="MovementActions" /> instance referencing this action map.
     /// </summary>
     public MovementActions @Movement => new MovementActions(this);
-
-    // Binds
-    private readonly InputActionMap m_Binds;
-    private List<IBindsActions> m_BindsActionsCallbackInterfaces = new List<IBindsActions>();
-    private readonly InputAction m_Binds_SwitchCameraMod;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "Binds".
-    /// </summary>
-    public struct BindsActions
-    {
-        private @InputPlayerMovement m_Wrapper;
-
-        /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
-        /// </summary>
-        public BindsActions(@InputPlayerMovement wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Binds/SwitchCameraMod".
-        /// </summary>
-        public InputAction @SwitchCameraMod => m_Wrapper.m_Binds_SwitchCameraMod;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Binds; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="BindsActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(BindsActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="BindsActions" />
-        public void AddCallbacks(IBindsActions instance)
-        {
-            if (instance == null || m_Wrapper.m_BindsActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_BindsActionsCallbackInterfaces.Add(instance);
-            @SwitchCameraMod.started += instance.OnSwitchCameraMod;
-            @SwitchCameraMod.performed += instance.OnSwitchCameraMod;
-            @SwitchCameraMod.canceled += instance.OnSwitchCameraMod;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="BindsActions" />
-        private void UnregisterCallbacks(IBindsActions instance)
-        {
-            @SwitchCameraMod.started -= instance.OnSwitchCameraMod;
-            @SwitchCameraMod.performed -= instance.OnSwitchCameraMod;
-            @SwitchCameraMod.canceled -= instance.OnSwitchCameraMod;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="BindsActions.UnregisterCallbacks(IBindsActions)" />.
-        /// </summary>
-        /// <seealso cref="BindsActions.UnregisterCallbacks(IBindsActions)" />
-        public void RemoveCallbacks(IBindsActions instance)
-        {
-            if (m_Wrapper.m_BindsActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
-        /// <seealso cref="BindsActions.AddCallbacks(IBindsActions)" />
-        /// <seealso cref="BindsActions.RemoveCallbacks(IBindsActions)" />
-        /// <seealso cref="BindsActions.UnregisterCallbacks(IBindsActions)" />
-        public void SetCallbacks(IBindsActions instance)
-        {
-            foreach (var item in m_Wrapper.m_BindsActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_BindsActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    /// <summary>
-    /// Provides a new <see cref="BindsActions" /> instance referencing this action map.
-    /// </summary>
-    public BindsActions @Binds => new BindsActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Movement" which allows adding and removing callbacks.
     /// </summary>
@@ -519,20 +391,5 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Binds" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="BindsActions.AddCallbacks(IBindsActions)" />
-    /// <seealso cref="BindsActions.RemoveCallbacks(IBindsActions)" />
-    public interface IBindsActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "SwitchCameraMod" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSwitchCameraMod(InputAction.CallbackContext context);
     }
 }

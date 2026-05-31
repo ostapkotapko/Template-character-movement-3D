@@ -109,6 +109,15 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""f72b6149-e6c0-402d-b454-b1239caec435"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -177,6 +186,17 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19268d11-1c5c-41ae-ab93-01a9bf5e6d49"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -215,6 +235,7 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
         m_Movement_Look = m_Movement.FindAction("Look", throwIfNotFound: true);
+        m_Movement_Sprint = m_Movement.FindAction("Sprint", throwIfNotFound: true);
         // Binds
         m_Binds = asset.FindActionMap("Binds", throwIfNotFound: true);
         m_Binds_SwitchCameraMod = m_Binds.FindAction("SwitchCameraMod", throwIfNotFound: true);
@@ -301,6 +322,7 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
     private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
     private readonly InputAction m_Movement_Move;
     private readonly InputAction m_Movement_Look;
+    private readonly InputAction m_Movement_Sprint;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -320,6 +342,10 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/Look".
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Movement_Look;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/Sprint".
+        /// </summary>
+        public InputAction @Sprint => m_Wrapper.m_Movement_Sprint;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -352,6 +378,9 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
         }
 
         /// <summary>
@@ -369,6 +398,9 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
         }
 
         /// <summary>
@@ -519,6 +551,13 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Sprint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSprint(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Binds" which allows adding and removing callbacks.

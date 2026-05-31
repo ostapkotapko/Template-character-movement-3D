@@ -5,7 +5,7 @@ public class CameraSwitcher : MonoBehaviour
 {
     [SerializeField] private Camera firstPersonCamera;
     [SerializeField] private Camera thirdPersonCamera;
-    [SerializeField] private InputActionReference switchCameraAction;
+    [SerializeField] private InputActionReference switchCameraAction; // Reference switch camera action in the Input Actions asset
 
     private void OnEnable()
     {

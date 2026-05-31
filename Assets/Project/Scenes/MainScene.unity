@@ -1020,7 +1020,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ddda41240872ae40b764e6179943bca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  canMove: 1
+  canSprint: 1
+  sprintAction: {fileID: 6854064703990804442, guid: 7915dceab115b3f418e9e9621c21a54f, type: 3}
   moveSpeed: 5
+  sprintMultiplier: 2
 --- !u!114 &1677898178
 MonoBehaviour:
   m_ObjectHideFlags: 0

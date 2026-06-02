@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction moveAction;
     private bool isSprinting = false;
+    private StaminaSystem staminaSystem;
 
     [Header("Settings")]
     [SerializeField] private InputActionReference sprintAction; // Reference sprint action in the Input Actions asset
@@ -23,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GameEvents.OnPlayerCanMove += SetCanMove;
         GameEvents.OnPlayerCanSprint += SetCanSprint;
-        sprintAction.action.performed += ctx => isSprinting = true;
-        sprintAction.action.canceled += ctx => isSprinting = false;
+        sprintAction.action.performed += ctx => {isSprinting = true; GameEvents.SetPlayerSprintingState(true);};
+        sprintAction.action.canceled += ctx => {isSprinting = false; GameEvents.SetPlayerSprintingState(false);};
     }
 
     private void OnDisable()
@@ -47,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
+
+        // Check if StaminaSystem exists - optional dependency
+        staminaSystem = GetComponent<StaminaSystem>();
     }
 
     private void Update()
@@ -67,7 +71,10 @@ public class PlayerMovement : MonoBehaviour
         // Apply sprint multiplier if sprinting
         if (isSprinting && canSprint)
         {
-            directionSpeed *= sprintMultiplier;
+            if(staminaSystem == null || staminaSystem.HasStamina) // If no stamina system, allow sprinting. If stamina system exists, check if player has stamina.
+            {
+                directionSpeed *= sprintMultiplier;
+            }
         }
 
         //Moving player

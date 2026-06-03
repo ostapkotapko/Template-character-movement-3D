@@ -12,13 +12,15 @@ public class PlayerMovement : MonoBehaviour
 
     private PlayerInput playerInput;
     private InputAction moveAction;
-    private bool isSprinting = false;
     private StaminaSystem staminaSystem;
 
     [Header("Settings")]
     [SerializeField] private InputActionReference sprintAction; // Reference sprint action in the Input Actions asset
     [SerializeField] private float moveSpeed = 5f; // Player speed
     [SerializeField] private float sprintMultiplier = 2f; // Sprint speed multiplier
+
+    [Header("Debug value")]
+    [SerializeField] private bool isSprinting = false;
 
     private void OnEnable()
     {

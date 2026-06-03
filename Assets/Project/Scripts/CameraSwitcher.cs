@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class CameraSwitcher : MonoBehaviour
 {
+    [Header("Settings")]
     [SerializeField] private Camera firstPersonCamera;
     [SerializeField] private Camera thirdPersonCamera;
     [SerializeField] private InputActionReference switchCameraAction; // Reference switch camera action in the Input Actions asset

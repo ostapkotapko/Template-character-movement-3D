@@ -6,12 +6,14 @@ public class FirstPersonCamera : MonoBehaviour
     // This script for first person player camera with InputAction and game events "bool canLook" that enable or disable camera movement
     // IMPORTANT: This script need PlayerInput component with "Look" action set up in the Input Actions asset
 
-    private bool canLook = true;
+    [Header("Possible features")]
+    [SerializeField] private bool canLook = true;
 
     private PlayerInput playerInput;
     private InputAction lookAction;
     private float currentVerticalAngle = 0f;
 
+    [Header("Settings")]
     [SerializeField] private Camera playerCamera; // Reference player camera
     [SerializeField] private float sensitivity = 0.1f; // Sensitivity for camera rotation
     [SerializeField] private float maxVerticalAngle = 80f; // Max vertical angle to prevent flipping

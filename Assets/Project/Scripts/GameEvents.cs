@@ -8,6 +8,7 @@ public static class GameEvents
     public static event Action<bool> OnFirstCameraLook;
     public static event Action<bool> OnThirdCameraLook;
     public static event Action<float> OnPlayerSpeedChanged;
+    public static event Action<bool> OnPlayerJumping;
 
     public static void SetPlayerMoveState(bool canMove)
     {
@@ -37,5 +38,10 @@ public static class GameEvents
     public static void SetPlayerSpeed(float normalizedSpeed)
     {
         OnPlayerSpeedChanged?.Invoke(normalizedSpeed);
+    }
+
+    public static void SetPlayerJump(bool isGrounded)
+    {
+        OnPlayerJumping?.Invoke(isGrounded);
     }
 }

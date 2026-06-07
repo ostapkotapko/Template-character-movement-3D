@@ -7,6 +7,7 @@ public static class GameEvents
     public static event Action<bool> OnPlayerSprinting;
     public static event Action<bool> OnFirstCameraLook;
     public static event Action<bool> OnThirdCameraLook;
+    public static event Action<float> OnPlayerSpeedChanged;
 
     public static void SetPlayerMoveState(bool canMove)
     {
@@ -31,5 +32,10 @@ public static class GameEvents
     public static void SetPlayerSprintingState(bool isSprinting)
     {
         OnPlayerSprinting?.Invoke(isSprinting);
+    }
+
+    public static void SetPlayerSpeed(float normalizedSpeed)
+    {
+        OnPlayerSpeedChanged?.Invoke(normalizedSpeed);
     }
 }

@@ -9,16 +9,25 @@ public class PlayerMovement : MonoBehaviour
     [Header("Possible features")]
     [SerializeField] private bool canMove = true;
     [SerializeField] private bool canSprint = true;
+    [SerializeField] private bool canJump = true;
+    private bool isSprinting = false;
 
     private PlayerInput playerInput;
     private InputAction moveAction;
     private StaminaSystem staminaSystem;
-    private float maxSpeed;
+    private Rigidbody rb;
 
     [Header("Settings")]
     [SerializeField] private InputActionReference sprintAction; // Reference sprint action in the Input Actions asset
     [SerializeField] private float moveSpeed = 5f; // Player speed
     [SerializeField] private float sprintMultiplier = 2f; // Sprint speed multiplier
+    [SerializeField] private InputActionReference jumpAction;
+    [SerializeField] private float jumpHeight = 2f;
+    [SerializeField] private bool isGrounded = true; // This is a simple grounded check, you can replace it with a more complex one if needed
+    private float maxSpeed;
+    [SerializeField] private Transform groundCheck; 
+    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private LayerMask groundLayer;
 
     [Header("Debug value")]
     [SerializeField] private bool isSprinting = false;
@@ -29,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
         GameEvents.OnPlayerCanSprint += SetCanSprint;
         sprintAction.action.performed += ctx => {isSprinting = true; GameEvents.SetPlayerSprintingState(true);};
         sprintAction.action.canceled += ctx => {isSprinting = false; GameEvents.SetPlayerSprintingState(false);};
+        jumpAction.action.performed += ctx => Jump();
     }
 
     private void OnDisable()
@@ -49,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
 
@@ -60,6 +71,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        bool wasGrounded = isGrounded;
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+        if(!wasGrounded && isGrounded)
+        {
+            GameEvents.SetPlayerJump(false);
+        }
+
         Move();
     }
 
@@ -71,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         // Else read input and move player
         Vector2 inputVector = moveAction.ReadValue<Vector2>();
         Vector3 directionVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
-        float directionSpeed = moveSpeed * Time.deltaTime;
+        directionVector = transform.TransformDirection(directionVector);
         float currentSpeed = inputVector.magnitude * moveSpeed;
 
         // Apply sprint multiplier if sprinting
@@ -79,14 +97,23 @@ public class PlayerMovement : MonoBehaviour
         {
             if(staminaSystem == null || staminaSystem.HasStamina) // If no stamina system, allow sprinting. If stamina system exists, check if player has stamina.
             {
-                directionSpeed *= sprintMultiplier;
                 currentSpeed *= sprintMultiplier;
             }
         }
 
         //Moving player
-        transform.position += transform.TransformDirection(directionVector) * directionSpeed;
+        rb.linearVelocity = new Vector3(directionVector.x * currentSpeed, rb.linearVelocity.y, directionVector.z * currentSpeed);
 
         GameEvents.SetPlayerSpeed(currentSpeed / maxSpeed);
+    }
+
+    private void Jump()
+    {
+        if(!isGrounded) return;
+
+        float jumpForce = Mathf.Sqrt(2f * Mathf.Abs(Physics.gravity.y) * jumpHeight);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+
+        GameEvents.SetPlayerJump(true);
     }
 }

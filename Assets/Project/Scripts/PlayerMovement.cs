@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool canMove = true;
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
-    private bool isSprinting = false;
 
     private PlayerInput playerInput;
     private InputAction moveAction;

@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction moveAction;
     private StaminaSystem staminaSystem;
+    private float maxSpeed;
 
     [Header("Settings")]
     [SerializeField] private InputActionReference sprintAction; // Reference sprint action in the Input Actions asset
@@ -53,6 +54,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Check if StaminaSystem exists - optional dependency
         staminaSystem = GetComponent<StaminaSystem>();
+
+        maxSpeed = moveSpeed * sprintMultiplier; // Calculate max speed for sprinting
     }
 
     private void Update()
@@ -69,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 inputVector = moveAction.ReadValue<Vector2>();
         Vector3 directionVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
         float directionSpeed = moveSpeed * Time.deltaTime;
+        float currentSpeed = inputVector.magnitude * moveSpeed;
 
         // Apply sprint multiplier if sprinting
         if (isSprinting && canSprint)
@@ -76,10 +80,13 @@ public class PlayerMovement : MonoBehaviour
             if(staminaSystem == null || staminaSystem.HasStamina) // If no stamina system, allow sprinting. If stamina system exists, check if player has stamina.
             {
                 directionSpeed *= sprintMultiplier;
+                currentSpeed *= sprintMultiplier;
             }
         }
 
         //Moving player
         transform.position += transform.TransformDirection(directionVector) * directionSpeed;
+
+        GameEvents.SetPlayerSpeed(currentSpeed / maxSpeed);
     }
 }

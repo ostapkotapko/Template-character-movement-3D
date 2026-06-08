@@ -127,6 +127,15 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""67e75e0e-7ebf-4926-a07a-0620b13b8d6a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -217,6 +226,17 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f42b034b-7cf6-4a64-bb2b-29a68e477f97"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -257,6 +277,7 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         m_Movement_Look = m_Movement.FindAction("Look", throwIfNotFound: true);
         m_Movement_Sprint = m_Movement.FindAction("Sprint", throwIfNotFound: true);
         m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
+        m_Movement_Crouch = m_Movement.FindAction("Crouch", throwIfNotFound: true);
         // Binds
         m_Binds = asset.FindActionMap("Binds", throwIfNotFound: true);
         m_Binds_SwitchCameraMod = m_Binds.FindAction("SwitchCameraMod", throwIfNotFound: true);
@@ -345,6 +366,7 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Look;
     private readonly InputAction m_Movement_Sprint;
     private readonly InputAction m_Movement_Jump;
+    private readonly InputAction m_Movement_Crouch;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -372,6 +394,10 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Movement_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/Crouch".
+        /// </summary>
+        public InputAction @Crouch => m_Wrapper.m_Movement_Crouch;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -410,6 +436,9 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Crouch.started += instance.OnCrouch;
+            @Crouch.performed += instance.OnCrouch;
+            @Crouch.canceled += instance.OnCrouch;
         }
 
         /// <summary>
@@ -433,6 +462,9 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Crouch.started -= instance.OnCrouch;
+            @Crouch.performed -= instance.OnCrouch;
+            @Crouch.canceled -= instance.OnCrouch;
         }
 
         /// <summary>
@@ -597,6 +629,13 @@ public partial class @InputPlayerMovement: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Crouch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCrouch(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Binds" which allows adding and removing callbacks.

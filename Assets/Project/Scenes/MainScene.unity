@@ -1014,7 +1014,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  crouchAction: {fileID: 5682596756135011812, guid: 7915dceab115b3f418e9e9621c21a54f, type: 3}
+  playerCollisionHeight: 3.5
+  crouchCollisionHeightMultiplier: 0.5
+  crouchSpeedMultiplier: 0.5
   isSprinting: 0
+  isCrouching: 0
 --- !u!114 &1677898178
 MonoBehaviour:
   m_ObjectHideFlags: 0

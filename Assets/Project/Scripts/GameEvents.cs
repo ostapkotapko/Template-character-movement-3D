@@ -9,6 +9,7 @@ public static class GameEvents
     public static event Action<bool> OnThirdCameraLook;
     public static event Action<float> OnPlayerSpeedChanged;
     public static event Action<bool> OnPlayerJumping;
+    public static event Action<bool> OnPlayerCrouching;
 
     public static void SetPlayerMoveState(bool canMove)
     {
@@ -43,5 +44,10 @@ public static class GameEvents
     public static void SetPlayerJump(bool isGrounded)
     {
         OnPlayerJumping?.Invoke(isGrounded);
+    }
+
+    public static void SetPlayerCrouch(bool isCrouching)
+    {
+        OnPlayerCrouching?.Invoke(isCrouching);
     }
 }

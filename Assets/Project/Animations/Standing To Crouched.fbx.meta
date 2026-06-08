@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 11bc74c18cbabf84699b1a4ea8817c6e
+guid: 520510d30d0364a47a86bd82c9a95c89
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,18 +31,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Walking
+      name: StandToCrouch
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 31
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

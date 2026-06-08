@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;
     private StaminaSystem staminaSystem;
     private Rigidbody rb;
+    private CapsuleCollider playerCollider;
 
     [Header("Settings")]
     [SerializeField] private InputActionReference sprintAction; // Reference sprint action in the Input Actions asset
@@ -27,9 +28,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck; 
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private InputActionReference crouchAction;
+    [SerializeField] private float playerCollisionHeight = 3.5f;
+    [SerializeField] private float crouchCollisionHeightMultiplier = 0.5f;
+    [SerializeField] private float crouchSpeedMultiplier = 0.5f;
+    private Vector3 playerColliderCenter;
 
     [Header("Debug value")]
     [SerializeField] private bool isSprinting = false;
+    [SerializeField] private bool isCrouching = false;
 
     private void OnEnable()
     {
@@ -38,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         sprintAction.action.performed += ctx => {isSprinting = true; GameEvents.SetPlayerSprintingState(true);};
         sprintAction.action.canceled += ctx => {isSprinting = false; GameEvents.SetPlayerSprintingState(false);};
         jumpAction.action.performed += ctx => Jump();
+        crouchAction.action.performed += ctx => Crouch();
     }
 
     private void OnDisable()
@@ -59,8 +67,11 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        playerCollider = GetComponent<CapsuleCollider>();
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
+
+        playerColliderCenter = playerCollider.center;
 
         // Check if StaminaSystem exists - optional dependency
         staminaSystem = GetComponent<StaminaSystem>();
@@ -99,6 +110,10 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed *= sprintMultiplier;
             }
         }
+        if(isCrouching)
+        {
+            currentSpeed *= crouchSpeedMultiplier;
+        }
 
         //Moving player
         rb.linearVelocity = new Vector3(directionVector.x * currentSpeed, rb.linearVelocity.y, directionVector.z * currentSpeed);
@@ -114,5 +129,25 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
 
         GameEvents.SetPlayerJump(true);
+    }
+
+    private void Crouch()
+    {
+        if(isCrouching)
+        {
+            // Stand up
+            playerCollider.height = playerCollisionHeight;
+            playerCollider.center = playerColliderCenter;
+            isCrouching = false;
+            GameEvents.SetPlayerCrouch(false);
+        }
+        else
+        {
+            // Crouch down
+            playerCollider.height = playerCollisionHeight * crouchCollisionHeightMultiplier;
+            playerCollider.center = new Vector3(playerColliderCenter.x, playerColliderCenter.y * crouchCollisionHeightMultiplier, playerColliderCenter.z);
+            isCrouching = true;
+            GameEvents.SetPlayerCrouch(true);
+        }
     }
 }

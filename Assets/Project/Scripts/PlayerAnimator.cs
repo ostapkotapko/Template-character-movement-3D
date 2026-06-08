@@ -12,12 +12,14 @@ public class PlayerAnimator : MonoBehaviour
     {
         GameEvents.OnPlayerSpeedChanged += SetPlayerSpeed;
         GameEvents.OnPlayerJumping += SetPlayerJump;
+        GameEvents.OnPlayerCrouching += SetPlayerCrouch;
     }
 
     private void OnDisable()
     {
         GameEvents.OnPlayerSpeedChanged -= SetPlayerSpeed;
         GameEvents.OnPlayerJumping -= SetPlayerJump;
+        GameEvents.OnPlayerCrouching -= SetPlayerCrouch;
     }
 
     private void Start()
@@ -45,5 +47,10 @@ public class PlayerAnimator : MonoBehaviour
     {
         playerJumping = isJumping;
         animator.SetBool("IsJumping", playerJumping);
+    }
+
+    private void SetPlayerCrouch(bool isCrouching)
+    {
+        animator.SetBool("IsCrouching", isCrouching);
     }
 }

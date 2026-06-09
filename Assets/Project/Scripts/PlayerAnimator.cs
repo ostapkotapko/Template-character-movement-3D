@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles player animations: speed, jumping, crouching.
+/// Requires: Animator component
+/// Listens to: GameEvents.OnPlayerSpeedChanged, GameEvents.OnPlayerJumping, GameEvents.OnPlayerCrouching
+/// </summary>
+
 public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private bool haveAnimations = false;
